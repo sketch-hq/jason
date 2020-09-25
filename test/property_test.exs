@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(ExUnitProperties) do
-  defmodule Jason.PropertyTest do
+  defmodule LosslessJason.PropertyTest do
     use ExUnit.Case, async: true
     use ExUnitProperties
 
@@ -68,8 +68,8 @@ if Code.ensure_loaded?(ExUnitProperties) do
       end
     end
 
-    defp decode(data, opts \\ []), do: Jason.decode!(data, opts)
-    defp encode(data, opts \\ []), do: Jason.encode!(data, opts)
+    defp decode(data, opts \\ []), do: LosslessJason.decode!(data, opts)
+    defp encode(data, opts \\ []), do: LosslessJason.encode!(data, opts)
 
     defp json(keys) do
       simple = one_of([integer(), float(), string(:printable), boolean(), nil])

@@ -1,4 +1,4 @@
-defprotocol Jason.Encoder do
+defprotocol LosslessJason.Encoder do
   @moduledoc """
   Protocol controlling how a value is encoded to JSON.
 
@@ -21,46 +21,46 @@ defprotocol Jason.Encoder do
         defstruct [:foo, :bar, :baz]
       end
 
-  If we were to call `@derive Jason.Encoder` just before `defstruct`,
+  If we were to call `@derive LosslessJason.Encoder` just before `defstruct`,
   an implementation similar to the following implementation would be generated:
 
-      defimpl Jason.Encoder, for: Test do
+      defimpl LosslessJason.Encoder, for: Test do
         def encode(value, opts) do
-          Jason.Encode.map(Map.take(value, [:foo, :bar, :baz]), opts)
+          LosslessJason.Encode.map(Map.take(value, [:foo, :bar, :baz]), opts)
         end
       end
 
-  If we called `@derive {Jason.Encoder, only: [:foo]}`, an implementation
+  If we called `@derive {LosslessJason.Encoder, only: [:foo]}`, an implementation
   similar to the following implementation would be generated:
 
-      defimpl Jason.Encoder, for: Test do
+      defimpl LosslessJason.Encoder, for: Test do
         def encode(value, opts) do
-          Jason.Encode.map(Map.take(value, [:foo]), opts)
+          LosslessJason.Encode.map(Map.take(value, [:foo]), opts)
         end
       end
 
-  If we called `@derive {Jason.Encoder, except: [:foo]}`, an implementation
+  If we called `@derive {LosslessJason.Encoder, except: [:foo]}`, an implementation
   similar to the following implementation would be generated:
 
-      defimpl Jason.Encoder, for: Test do
+      defimpl LosslessJason.Encoder, for: Test do
         def encode(value, opts) do
-          Jason.Encode.map(Map.take(value, [:bar, :baz]), opts)
+          LosslessJason.Encode.map(Map.take(value, [:bar, :baz]), opts)
         end
       end
 
   The actually generated implementations are more efficient computing some data
-  during compilation similar to the macros from the `Jason.Helpers` module.
+  during compilation similar to the macros from the `LosslessJason.Helpers` module.
 
   ## Explicit implementation
 
   If you wish to implement the protocol fully yourself, it is advised to
-  use functions from the `Jason.Encode` module to do the actual iodata
+  use functions from the `LosslessJason.Encode` module to do the actual iodata
   generation - they are highly optimized and verified to always produce
   valid JSON.
   """
 
   @type t :: term
-  @type opts :: Jason.Encode.opts()
+  @type opts :: LosslessJason.Encode.opts()
 
   @fallback_to_any true
 
@@ -68,24 +68,24 @@ defprotocol Jason.Encoder do
   Encodes `value` to JSON.
 
   The argument `opts` is opaque - it can be passed to various functions in
-  `Jason.Encode` (or to the protocol function itself) for encoding values to JSON.
+  `LosslessJason.Encode` (or to the protocol function itself) for encoding values to JSON.
   """
   @spec encode(t, opts) :: iodata
   def encode(value, opts)
 end
 
-defimpl Jason.Encoder, for: Any do
+defimpl LosslessJason.Encoder, for: Any do
   defmacro __deriving__(module, struct, opts) do
     fields = fields_to_encode(struct, opts)
     kv = Enum.map(fields, &{&1, generated_var(&1, __MODULE__)})
     escape = quote(do: escape)
     encode_map = quote(do: encode_map)
     encode_args = [escape, encode_map]
-    kv_iodata = Jason.Codegen.build_kv_iodata(kv, encode_args)
+    kv_iodata = LosslessJason.Codegen.build_kv_iodata(kv, encode_args)
 
     quote do
-      defimpl Jason.Encoder, for: unquote(module) do
-        require Jason.Helpers
+      defimpl LosslessJason.Encoder, for: unquote(module) do
+        require LosslessJason.Helpers
 
         def encode(%{unquote_splicing(kv)}, {unquote(escape), unquote(encode_map)}) do
           unquote(kv_iodata)
@@ -104,26 +104,26 @@ defimpl Jason.Encoder, for: Any do
       protocol: @protocol,
       value: struct,
       description: """
-      Jason.Encoder protocol must always be explicitly implemented.
+      LosslessJason.Encoder protocol must always be explicitly implemented.
 
       If you own the struct, you can derive the implementation specifying \
       which fields should be encoded to JSON:
 
-          @derive {Jason.Encoder, only: [....]}
+          @derive {LosslessJason.Encoder, only: [....]}
           defstruct ...
 
       It is also possible to encode all fields, although this should be \
       used carefully to avoid accidentally leaking private information \
       when new fields are added:
 
-          @derive Jason.Encoder
+          @derive LosslessJason.Encoder
           defstruct ...
 
       Finally, if you don't own the struct you want to encode to JSON, \
       you may use Protocol.derive/3 placed outside of any module:
 
-          Protocol.derive(Jason.Encoder, NameOfTheStruct, only: [...])
-          Protocol.derive(Jason.Encoder, NameOfTheStruct)
+          Protocol.derive(LosslessJason.Encoder, NameOfTheStruct, only: [...])
+          Protocol.derive(LosslessJason.Encoder, NameOfTheStruct)
       """
   end
 
@@ -131,7 +131,7 @@ defimpl Jason.Encoder, for: Any do
     raise Protocol.UndefinedError,
       protocol: @protocol,
       value: value,
-      description: "Jason.Encoder protocol must always be explicitly implemented"
+      description: "LosslessJason.Encoder protocol must always be explicitly implemented"
   end
 
   defp fields_to_encode(struct, opts) do
@@ -149,42 +149,42 @@ defimpl Jason.Encoder, for: Any do
 end
 
 # The following implementations are formality - they are already covered
-# by the main encoding mechanism in Jason.Encode, but exist mostly for
+# by the main encoding mechanism in LosslessJason.Encode, but exist mostly for
 # documentation purposes and if anybody had the idea to call the protocol directly.
 
-defimpl Jason.Encoder, for: Atom do
+defimpl LosslessJason.Encoder, for: Atom do
   def encode(atom, opts) do
-    Jason.Encode.atom(atom, opts)
+    LosslessJason.Encode.atom(atom, opts)
   end
 end
 
-defimpl Jason.Encoder, for: Integer do
+defimpl LosslessJason.Encoder, for: Integer do
   def encode(integer, _opts) do
-    Jason.Encode.integer(integer)
+    LosslessJason.Encode.integer(integer)
   end
 end
 
-defimpl Jason.Encoder, for: Float do
+defimpl LosslessJason.Encoder, for: Float do
   def encode(float, _opts) do
-    Jason.Encode.float(float)
+    LosslessJason.Encode.float(float)
   end
 end
 
-defimpl Jason.Encoder, for: List do
+defimpl LosslessJason.Encoder, for: List do
   def encode(list, opts) do
-    Jason.Encode.list(list, opts)
+    LosslessJason.Encode.list(list, opts)
   end
 end
 
-defimpl Jason.Encoder, for: Map do
+defimpl LosslessJason.Encoder, for: Map do
   def encode(map, opts) do
-    Jason.Encode.map(map, opts)
+    LosslessJason.Encode.map(map, opts)
   end
 end
 
-defimpl Jason.Encoder, for: BitString do
+defimpl LosslessJason.Encoder, for: BitString do
   def encode(binary, opts) when is_binary(binary) do
-    Jason.Encode.string(binary, opts)
+    LosslessJason.Encode.string(binary, opts)
   end
 
   def encode(bitstring, _opts) do
@@ -195,13 +195,13 @@ defimpl Jason.Encoder, for: BitString do
   end
 end
 
-defimpl Jason.Encoder, for: [Date, Time, NaiveDateTime, DateTime] do
+defimpl LosslessJason.Encoder, for: [Date, Time, NaiveDateTime, DateTime] do
   def encode(value, _opts) do
     [?\", @for.to_iso8601(value), ?\"]
   end
 end
 
-defimpl Jason.Encoder, for: Decimal do
+defimpl LosslessJason.Encoder, for: Decimal do
   def encode(value, _opts) do
     # silence the xref warning
     decimal = Decimal
@@ -209,7 +209,7 @@ defimpl Jason.Encoder, for: Decimal do
   end
 end
 
-defimpl Jason.Encoder, for: Jason.Fragment do
+defimpl LosslessJason.Encoder, for: LosslessJason.Fragment do
   def encode(%{encode: encode}, opts) do
     encode.(opts)
   end

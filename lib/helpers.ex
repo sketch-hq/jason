@@ -1,18 +1,18 @@
-defmodule Jason.Helpers do
+defmodule LosslessJason.Helpers do
   @moduledoc """
   Provides macro facilities for partial compile-time encoding of JSON.
   """
 
-  alias Jason.{Codegen, Fragment}
+  alias LosslessJason.{Codegen, Fragment}
 
   @doc ~S"""
   Encodes a JSON map from a compile-time keyword.
 
   Encodes the keys at compile time and strives to create as flat iodata
   structure as possible to achieve maximum efficiency. Does encoding
-  right at the call site, but returns an `%Jason.Fragment{}` struct
+  right at the call site, but returns an `%LosslessJason.Fragment{}` struct
   that needs to be passed to one of the "main" encoding functions -
-  for example `Jason.encode/2` for final encoding into JSON - this
+  for example `LosslessJason.encode/2` for final encoding into JSON - this
   makes it completely transparent for most uses.
 
   Only allows keys that do not require escaping in any of the supported
@@ -25,7 +25,7 @@ defmodule Jason.Helpers do
   ## Example
 
       iex> fragment = json_map(foo: 1, bar: 2)
-      iex> Jason.encode!(fragment)
+      iex> LosslessJason.encode!(fragment)
       "{\"foo\":1,\"bar\":2}"
 
   """
@@ -63,7 +63,7 @@ defmodule Jason.Helpers do
 
       iex> map = %{a: 1, b: 2, c: 3}
       iex> fragment = json_map_take(map, [:c, :b])
-      iex> Jason.encode!(fragment)
+      iex> LosslessJason.encode!(fragment)
       "{\"c\":3,\"b\":2}"
 
   """

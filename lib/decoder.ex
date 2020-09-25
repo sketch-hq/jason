@@ -1,4 +1,4 @@
-defmodule Jason.DecodeError do
+defmodule LosslessJason.DecodeError do
   @type t :: %__MODULE__{position: integer, data: String.t}
 
   defexception [:position, :token, :data]
@@ -22,12 +22,12 @@ defmodule Jason.DecodeError do
   end
 end
 
-defmodule Jason.Decoder do
+defmodule LosslessJason.Decoder do
   @moduledoc false
 
   import Bitwise
 
-  alias Jason.{DecodeError, Codegen}
+  alias LosslessJason.{DecodeError, Codegen}
 
   import Codegen, only: [bytecase: 2, bytecase: 3]
 

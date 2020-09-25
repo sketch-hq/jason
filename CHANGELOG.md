@@ -10,9 +10,9 @@
 
 ### Security
 
-* Fix `html_safe` escaping in `Jason.encode`
+* Fix `html_safe` escaping in `LosslessJason.encode`
 
-The `<!--` sequence of characters would not be escaped in `Jason.encode`
+The `<!--` sequence of characters would not be escaped in `LosslessJason.encode`
 with`html_escape` mode, which could lead to DoS attacks when used for
 embedding of arbitrary, user controlled strings into HTML through JSON
 (e.g. inside of `<script>` tags).
@@ -26,12 +26,12 @@ Patched versions: >= 1.2.1
 
 ### Enhancements
 
-* Add `Jason.Encode.keyword/2`
+* Add `LosslessJason.Encode.keyword/2`
   ([cb1f26a](https://github.com/michalmuskala/jason/commit/cb1f26a)).
 
 ### Bug fixes
 
-* Fix `Jason.Helpers.json_map/1` value expansion
+* Fix `LosslessJason.Helpers.json_map/1` value expansion
   ([70b046a](https://github.com/michalmuskala/jason/commit/70b046a)).
 
 ## 1.1.2 (19.10.2018)
@@ -52,8 +52,8 @@ Patched versions: >= 1.2.1
 
 ### Enhancements
 
-* pretty-printing support through `Jason.Formatter` and `pretty: true` option
-  in `Jason.encode/2` ([d758e36](https://github.com/michalmuskala/jason/commit/d758e36)).
+* pretty-printing support through `LosslessJason.Formatter` and `pretty: true` option
+  in `LosslessJason.encode/2` ([d758e36](https://github.com/michalmuskala/jason/commit/d758e36)).
 
 ### Bug fixes
 
@@ -66,7 +66,7 @@ Patched versions: >= 1.2.1
 
 ### Bug fixes
 
-* fix `Jason.Encode.escape` type ([a57b430](https://github.com/michalmuskala/jason/commit/a57b430))
+* fix `LosslessJason.Encode.escape` type ([a57b430](https://github.com/michalmuskala/jason/commit/a57b430))
 * multiple documentation improvements
 
 ## 1.0.0 (26.01.2018)
@@ -77,7 +77,7 @@ No changes
 
 ### Changes
 
-* update `escape` option of `Jason.encode/2` to take values:
+* update `escape` option of `LosslessJason.encode/2` to take values:
   `:json | :unicode_safe | :html_safe | :javascript_safe` for consistency. Old values of
   `:unicode` and `:javascript` are still supported for compatibility with Poison.
   ([f42dcbd](https://github.com/michalmuskala/jason/commit/f42dcbd))

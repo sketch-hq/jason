@@ -1,6 +1,6 @@
 encode_jobs = %{
-  "Jason"          => &Jason.encode_to_iodata!/1,
-  "Jason strict"   => &Jason.encode_to_iodata!(&1, maps: :strict),
+  "Jason"          => &LosslessJason.encode_to_iodata!/1,
+  "Jason strict"   => &LosslessJason.encode_to_iodata!(&1, maps: :strict),
   "Poison"         => &Poison.encode_to_iodata!/1,
   "JSX"            => &JSX.encode!/1,
   "Tiny"           => &Tiny.encode!/1,
@@ -40,7 +40,7 @@ Benchee.run(encode_jobs,
   inputs: for name <- encode_inputs, into: %{} do
             name
             |> read_data.()
-            |> Jason.decode!()
+            |> LosslessJason.decode!()
             |> (&{name, &1}).()
           end,
   formatters: [

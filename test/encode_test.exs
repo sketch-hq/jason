@@ -1,7 +1,7 @@
-defmodule Jason.EncoderTest do
+defmodule LosslessJason.EncoderTest do
   use ExUnit.Case, async: true
 
-  alias Jason.{EncodeError, Encoder}
+  alias LosslessJason.{EncodeError, Encoder}
 
   test "atom" do
     assert to_json(nil) == "null"
@@ -119,8 +119,8 @@ defmodule Jason.EncoderTest do
 
   test "@derive" do
     derived = %Derived{name: "derived"}
-    assert Encoder.impl_for!(derived) == Encoder.Jason.EncoderTest.Derived
-    assert Jason.decode!(to_json(derived)) == %{"name" => "derived"}
+    assert Encoder.impl_for!(derived) == Encoder.LosslessJason.EncoderTest.Derived
+    assert LosslessJason.decode!(to_json(derived)) == %{"name" => "derived"}
 
     non_derived = %NonDerived{name: "non-derived"}
     assert_raise Protocol.UndefinedError, fn ->
@@ -138,12 +138,12 @@ defmodule Jason.EncoderTest do
     defstruct [:baz, :foo, :quux]
   end
 
-  defimpl Jason.Encoder, for: [KeywordTester] do
+  defimpl LosslessJason.Encoder, for: [KeywordTester] do
     def encode(struct, opts) do
       struct
       |> Map.from_struct
       |> Enum.map(&(&1))
-      |> Jason.Encode.keyword(opts)
+      |> LosslessJason.Encode.keyword(opts)
     end
   end
 
@@ -167,7 +167,7 @@ defmodule Jason.EncoderTest do
   end
 
   test "encode should not raise on Protocol.UndefinedError" do
-    assert {:error, %Protocol.UndefinedError{}} = Jason.encode(self())
+    assert {:error, %Protocol.UndefinedError{}} = LosslessJason.encode(self())
   end
 
   test "pretty: true" do
@@ -179,7 +179,7 @@ defmodule Jason.EncoderTest do
   end
 
   defp to_json(value, opts \\ []) do
-    Jason.encode!(value, opts)
+    LosslessJason.encode!(value, opts)
   end
 
 end

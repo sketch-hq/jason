@@ -1,7 +1,7 @@
-defmodule Jason.Codegen do
+defmodule LosslessJason.Codegen do
   @moduledoc false
 
-  alias Jason.{Encode, EncodeError}
+  alias LosslessJason.{Encode, EncodeError}
 
   def jump_table(ranges, default) do
     ranges

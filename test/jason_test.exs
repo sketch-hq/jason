@@ -1,5 +1,5 @@
-defmodule JasonTest do
+defmodule LosslessJasonTest do
   use ExUnit.Case, async: true
 
-  doctest Jason
+  doctest LosslessJason
 end

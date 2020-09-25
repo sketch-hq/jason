@@ -1,5 +1,5 @@
-Unknown function 'Elixir.Jason.Encoder.Function':'__impl__'/1
-Unknown function 'Elixir.Jason.Encoder.PID':'__impl__'/1
-Unknown function 'Elixir.Jason.Encoder.Port':'__impl__'/1
-Unknown function 'Elixir.Jason.Encoder.Reference':'__impl__'/1
-Unknown function 'Elixir.Jason.Encoder.Tuple':'__impl__'/1
+Unknown function 'Elixir.LosslessJason.Encoder.Function':'__impl__'/1
+Unknown function 'Elixir.LosslessJason.Encoder.PID':'__impl__'/1
+Unknown function 'Elixir.LosslessJason.Encoder.Port':'__impl__'/1
+Unknown function 'Elixir.LosslessJason.Encoder.Reference':'__impl__'/1
+Unknown function 'Elixir.LosslessJason.Encoder.Tuple':'__impl__'/1

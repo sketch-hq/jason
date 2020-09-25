@@ -1,4 +1,4 @@
-defmodule Jason.EncodeError do
+defmodule LosslessJason.EncodeError do
   defexception [:message]
 
   @type t :: %__MODULE__{message: String.t}
@@ -11,14 +11,14 @@ defmodule Jason.EncodeError do
   end
 end
 
-defmodule Jason.Encode do
+defmodule LosslessJason.Encode do
   @moduledoc """
   Utilities for encoding elixir values to JSON.
   """
 
   import Bitwise
 
-  alias Jason.{Codegen, EncodeError, Encoder, Fragment}
+  alias LosslessJason.{Codegen, EncodeError, Encoder, Fragment}
 
   @typep escape :: (String.t, String.t, integer -> iodata)
   @typep encode_map :: (map, escape, encode_map -> iodata)
@@ -36,7 +36,7 @@ defmodule Jason.Encode do
     catch
       :throw, %EncodeError{} = e ->
         {:error, e}
-      :error, %Protocol.UndefinedError{protocol: Jason.Encoder} = e ->
+      :error, %Protocol.UndefinedError{protocol: LosslessJason.Encoder} = e ->
         {:error, e}
     end
   end
@@ -61,7 +61,7 @@ defmodule Jason.Encode do
   end
 
   @doc """
-  Equivalent to calling the `Jason.Encoder.encode/2` protocol function.
+  Equivalent to calling the `LosslessJason.Encoder.encode/2` protocol function.
 
   Slightly more efficient for built-in types because of the internal dispatching.
   """

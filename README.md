@@ -26,10 +26,10 @@ end
 ## Basic Usage
 
 ``` elixir
-iex(1)> Jason.encode!(%{"age" => 44, "name" => "Steve Irwin", "nationality" => "Australian"})
+iex(1)> LosslessJason.encode!(%{"age" => 44, "name" => "Steve Irwin", "nationality" => "Australian"})
 "{\"age\":44,\"name\":\"Steve Irwin\",\"nationality\":\"Australian\"}"
 
-iex(2)> Jason.decode!(~s({"age":44,"name":"Steve Irwin","nationality":"Australian"}))
+iex(2)> LosslessJason.decode!(~s({"age":44,"name":"Steve Irwin","nationality":"Australian"}))
 %{"age" => 44, "name" => "Steve Irwin", "nationality" => "Australian"}
 ```
 
@@ -93,16 +93,16 @@ Jason has a couple feature differences compared to Poison.
   * no support for decoding into data structures (the `as:` option).
   * no built-in encoders for `MapSet`, `Range` and `Stream`.
   * no support for encoding arbitrary structs - explicit implementation
-    of the `Jason.Encoder` protocol is always required.
+    of the `LosslessJason.Encoder` protocol is always required.
   * different pretty-printing customisation options (default `pretty: true` works the same)
 
 If you require encoders for any of the unsupported collection types, I suggest
 adding the needed implementations directly to your project:
 
 ```elixir
-defimpl Jason.Encoder, for: [MapSet, Range, Stream] do
+defimpl LosslessJason.Encoder, for: [MapSet, Range, Stream] do
   def encode(struct, opts) do
-    Jason.Encode.list(Enum.to_list(struct), opts)
+    LosslessJason.Encode.list(Enum.to_list(struct), opts)
   end
 end
 ```
@@ -112,7 +112,7 @@ if you own the struct, you can derive the implementation specifying
 which fields should be encoded to JSON:
 
 ```elixir
-@derive {Jason.Encoder, only: [....]}
+@derive {LosslessJason.Encoder, only: [....]}
 defstruct # ...
 ```
 
@@ -121,7 +121,7 @@ used carefully to avoid accidentally leaking private information
 when new fields are added:
 
 ```elixir
-@derive Jason.Encoder
+@derive LosslessJason.Encoder
 defstruct # ...
 ```
 
@@ -129,8 +129,8 @@ Finally, if you don't own the struct you want to encode to JSON,
 you may use `Protocol.derive/3` placed outside of any module:
 
 ```elixir
-Protocol.derive(Jason.Encoder, NameOfTheStruct, only: [...])
-Protocol.derive(Jason.Encoder, NameOfTheStruct)
+Protocol.derive(LosslessJason.Encoder, NameOfTheStruct, only: [...])
+Protocol.derive(LosslessJason.Encoder, NameOfTheStruct)
 ```
 
 ## License

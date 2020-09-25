@@ -1,7 +1,7 @@
-defmodule Jason.DecodeTest do
+defmodule LosslessJason.DecodeTest do
   use ExUnit.Case, async: true
 
-  alias Jason.DecodeError
+  alias LosslessJason.DecodeError
 
   test "numbers" do
     assert_fail_with "-", "unexpected end of input at position 1"
@@ -141,7 +141,7 @@ defmodule Jason.DecodeTest do
   end
 
   defp parse!(json, opts \\ []) do
-    Jason.decode!(json, opts)
+    LosslessJason.decode!(json, opts)
   end
 
   defp assert_fail_with(string, error) do
