@@ -84,8 +84,10 @@ defmodule LosslessJason.Encode do
     integer(value)
   end
 
-  def value(value, _escape, _encode_map) when is_float(value) do
-    float(value)
+  def value(value, escape, _encode_map) when is_float(value) do
+    value
+    |> Float.to_string()
+    |> encode_string(escape)
   end
 
   def value(value, escape, encode_map) when is_list(value) do
@@ -127,7 +129,7 @@ defmodule LosslessJason.Encode do
 
   @spec float(float) :: iodata
   def float(float) do
-    :io_lib_format.fwrite_g(float)
+    Float.to_string(float)
   end
 
   @spec list(list, opts) :: iodata

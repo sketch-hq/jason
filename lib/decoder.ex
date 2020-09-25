@@ -602,11 +602,8 @@ defmodule LosslessJason.Decoder do
     error(original, skip + 6)
   end
 
-  defp try_parse_float(string, token, skip) do
-    :erlang.binary_to_float(string)
-  catch
-    :error, :badarg ->
-      token_error(token, skip)
+  defp try_parse_float(string, _token, _skip) do
+    string
   end
 
   defp error(<<_rest::bits>>, _original, skip, _stack, _key_decode, _string_decode) do
@@ -617,13 +614,9 @@ defmodule LosslessJason.Decoder do
     throw {:position, skip}
   end
 
-  @compile {:inline, error: 2, token_error: 2, token_error: 3}
+  @compile {:inline, error: 2, token_error: 3}
   defp error(_original, skip) do
     throw {:position, skip}
-  end
-
-  defp token_error(token, position) do
-    throw {:token, token, position}
   end
 
   defp token_error(token, position, len) do

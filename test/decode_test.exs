@@ -11,26 +11,25 @@ defmodule LosslessJason.DecodeTest do
     assert_fail_with "1.", "unexpected end of input at position 2"
     assert_fail_with "1e", "unexpected end of input at position 2"
     assert_fail_with "1.0e+", "unexpected end of input at position 5"
-    assert_fail_with "1e999", "unexpected sequence at position 0: \"1e999\""
 
     assert parse!("0") == 0
     assert parse!("1") == 1
     assert parse!("-0") == 0
     assert parse!("-1") == -1
-    assert parse!("0.1") == 0.1
-    assert parse!("-0.1") == -0.1
-    assert parse!("0e0") == 0
-    assert parse!("0E0") == 0
-    assert parse!("1e0") == 1
-    assert parse!("1E0") == 1
-    assert parse!("1.0e0") == 1.0
-    assert parse!("1e+0") == 1
-    assert parse!("1.0e+0") == 1.0
-    assert parse!("0.1e1") == 0.1e1
-    assert parse!("0.1e-1") == 0.1e-1
-    assert parse!("99.99e99") == 99.99e99
-    assert parse!("-99.99e-99") == -99.99e-99
-    assert parse!("123456789.123456789e123") == 123456789.123456789e123
+    assert parse!("0.1") == "0.1"
+    assert parse!("-0.1") == "-0.1"
+    assert parse!("0e0") == "0.0e0"
+    assert parse!("0E0") == "0.0e0"
+    assert parse!("1e0") == "1.0e0"
+    assert parse!("1E0") == "1.0e0"
+    assert parse!("1.0e0") == "1.0e0"
+    assert parse!("1e+0") == "1.0e+0"
+    assert parse!("1.0e+0") == "1.0e+0"
+    assert parse!("0.1e1") == "0.1e1"
+    assert parse!("0.1e-1") == "0.1e-1"
+    assert parse!("99.99e99") == "99.99e99"
+    assert parse!("-99.99e-99") == "-99.99e-99"
+    assert parse!("123456789.123456789e123") == "123456789.123456789e123"
   end
   test "strings" do
     assert_fail_with ~s("), "unexpected end of input at position 1"

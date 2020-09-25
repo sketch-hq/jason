@@ -15,8 +15,8 @@ defmodule LosslessJason.EncoderTest do
   end
 
   test "float" do
-    assert to_json(99.99) == "99.99"
-    assert to_json(9.9e100) == "9.9e100"
+    assert to_json(99.99) == "\"99.99\""
+    assert to_json(9.9e100) == "\"9.9e100\""
   end
 
   test "binaries" do
@@ -171,11 +171,11 @@ defmodule LosslessJason.EncoderTest do
   end
 
   test "pretty: true" do
-    assert to_json(%{a: 3.14159, b: 1}, pretty: true) == ~s|{\n  "a": 3.14159,\n  "b": 1\n}|
+    assert to_json(%{a: 3.14159, b: 1}, pretty: true) == ~s|{\n  "a": \"3.14159\",\n  "b": 1\n}|
   end
 
   test "pretty: false" do
-    assert to_json(%{a: 3.14159, b: 1}, pretty: false) == ~s|{"a":3.14159,"b":1}|
+    assert to_json(%{a: 3.14159, b: 1}, pretty: false) == ~s|{"a":\"3.14159\","b":1}|
   end
 
   defp to_json(value, opts \\ []) do

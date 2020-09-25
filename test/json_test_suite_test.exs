@@ -11,13 +11,14 @@ defmodule LosslessJason.JsonTestSuite do
     "number_too_big_pos_int.json",
     "number_very_big_negative_int.json",
     "structure_500_nested_arrays.json",
-  ]
-  i_fails = [
     "number_huge_exp.json",
     "number_neg_int_huge_exp.json",
     "number_pos_double_huge_exp.json",
     "number_real_neg_overflow.json",
-    "number_real_pos_overflow.json",
+    "number_real_pos_overflow.json"
+  ]
+  i_fails = [
+
     "object_key_lone_2nd_surrogate.json",
     "string_1st_surrogate_but_2nd_missing.json",
     "string_1st_valid_surrogate_2nd_invalid.json",

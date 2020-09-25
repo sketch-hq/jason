@@ -17,7 +17,7 @@ if Code.ensure_loaded?(ExUnitProperties) do
 
     property "float roundtrip" do
       check all float <- float() do
-        assert decode(encode(float)) == float
+        assert decode(encode(float)) == Float.to_string(float)
       end
     end
 
@@ -72,7 +72,7 @@ if Code.ensure_loaded?(ExUnitProperties) do
     defp encode(data, opts \\ []), do: LosslessJason.encode!(data, opts)
 
     defp json(keys) do
-      simple = one_of([integer(), float(), string(:printable), boolean(), nil])
+      simple = one_of([integer(), string(:printable), boolean(), nil])
       tree(simple, fn json ->
         one_of([list_of(json), map_of(keys, json)])
       end)
